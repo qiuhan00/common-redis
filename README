@@ -1,6 +1,8 @@
 redisson-spring-boot-starter启动器版本，使用时项目中配置方式如下：
 
 application.properties配置：
+    # 默认有效时间
+    redis.default.ttl=1800
     spring.redis.redisson.config=classpath:redisson.yml
 
 redisson.yml配置（以下单节点配置格式）：
