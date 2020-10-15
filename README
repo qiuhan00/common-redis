@@ -1,0 +1,32 @@
+spring-boot-starter-data-redis + commons-pool2 + redisson，使用时项目配置：
+
+application.properties配置：
+
+# Redis 配置
+# 默认有效时间
+redis.default.ttl=1800
+## Redis数据库索引（默认为0）
+spring.redis.database=0
+spring.redis.host=xxx.xxx.xxx.xxx
+spring.redis.port=6379
+#spring.redis.password=
+## 连接超时时间（毫秒）
+spring.redis.timeout=1200
+## 连接池最大连接数（使用负值表示没有限制）
+spring.redis.lettuce.pool.max-active=16
+## 连接池最大阻塞等待时间（使用负值表示没有限制）
+spring.redis.lettuce.pool.max-wait=-1
+## 连接池中的最大空闲连接
+spring.redis.lettuce.pool.max-idle=8
+## 连接池中的最小空闲连接
+spring.redis.lettuce.pool.min-idle=0
+
+
+# redisson配置
+spring.redis.redisson.address = redis://xxx.xxx.xxx.xxx:6379
+spring.redis.redisson.timeout = 15000
+spring.redis.redisson.password =
+spring.redis.redisson.clientName =
+spring.redis.redisson.connectionMinimumIdleSize = 5
+spring.redis.redisson.connectionPoolSize = 64
+spring.redis.redisson.database = 10
