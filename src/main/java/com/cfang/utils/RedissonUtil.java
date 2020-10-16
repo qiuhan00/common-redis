@@ -16,7 +16,6 @@ import java.util.concurrent.locks.Lock;
  * @description
  */
 @Slf4j
-@Component
 public class RedissonUtil {
 
 	@Autowired
