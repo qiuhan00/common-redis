@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.cfang.config.RedisAutoConfiguration,\
+com.cfang.utils.RedissonUtil,\
+com.cfang.utils.CommonRedisUtil
