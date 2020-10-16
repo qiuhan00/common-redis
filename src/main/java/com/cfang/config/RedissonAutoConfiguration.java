@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
@@ -38,7 +39,8 @@ public class RedissonAutoConfiguration {
 		SingleServerConfig serverConfig = config.useSingleServer()
 				.setAddress(this.redissonProperties.getAddress())
 				.setTimeout(this.redissonProperties.getTimeout())
-				.setConnectionPoolSize(this.redissonProperties.getConnectionPoolSize()).setConnectionMinimumIdleSize(this.redissonProperties.getConnectionMinimumIdleSize())
+				.setConnectionPoolSize(this.redissonProperties.getConnectionPoolSize())
+				.setConnectionMinimumIdleSize(this.redissonProperties.getConnectionMinimumIdleSize())
 				.setDatabase(this.redissonProperties.getDatabase());
 		if(StrUtil.isNotBlank(redissonProperties.getPassword())) {
 			serverConfig.setPassword(this.redissonProperties.getPassword());
@@ -49,7 +51,8 @@ public class RedissonAutoConfiguration {
 		}
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-		objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+//		objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
 		config.setCodec((Codec)new JsonJacksonCodec(objectMapper));
 		return Redisson.create(config);
 	}
