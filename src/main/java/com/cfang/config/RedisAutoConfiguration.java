@@ -23,6 +23,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,6 +53,11 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
 	Integer defaultTTL;
 	@Value("${redis.default.prefixKey}")
 	String prefixKey;
+
+	@Override
+	public CacheErrorHandler errorHandler() {
+		return new NotifyExceptionCacheErrorHandler();
+	}
 
 	@Bean
 	public RedisTemplate<String, Object> redisTemplate(){
