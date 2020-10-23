@@ -50,13 +50,15 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
 	RedisConnectionFactory factory;
 	@Value("${redis.default.ttl}")
 	Integer defaultTTL;
+	@Value("${redis.default.prefixKey}")
+	String prefixKey;
 
 	@Bean
 	public RedisTemplate<String, Object> redisTemplate(){
 		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 		redisTemplate.setConnectionFactory(factory);
 		// 字符串Key序列化
-		StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+		StringRedisSerializer stringRedisSerializer = new PrefixStringKeySerializer(prefixKey);
 		redisTemplate.setKeySerializer(stringRedisSerializer);
 		redisTemplate.setHashKeySerializer(stringRedisSerializer);
 		// 对象值序列化,默认使用JdkSerializationRedisSerializer
@@ -95,7 +97,7 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
 	public CacheManager cacheManager(){
 		RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
 				.entryTtl(Duration.ofSeconds(defaultTTL))
-				.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))//StringRedisSerializer序列化和反序列化key
+				.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new PrefixStringKeySerializer(prefixKey)))//StringRedisSerializer序列化和反序列化key
 				.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer()))//Jackson2JsonRedisSerializer序列化和反序列化value
 				.disableCachingNullValues();//禁用空值
 		return RedisCacheManager.builder(RedisCacheWriter.nonLockingRedisCacheWriter(factory))
@@ -154,7 +156,7 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
 	private RedisCacheConfiguration getRedisCacheConfigurationWithTtl(Integer seconds) {
 		RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
 				.entryTtl(Duration.ofSeconds(seconds)) //配置有效期
-				.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))//StringRedisSerializer序列化和反序列化key
+				.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new PrefixStringKeySerializer(prefixKey)))//StringRedisSerializer序列化和反序列化key
 				.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer()))//Jackson2JsonRedisSerializer序列化和反序列化value
 				.disableCachingNullValues();//禁用空值
 		return redisCacheConfiguration;
