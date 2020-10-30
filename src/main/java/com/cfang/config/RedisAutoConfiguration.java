@@ -32,6 +32,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -57,6 +58,13 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
 	@Override
 	public CacheErrorHandler errorHandler() {
 		return new NotifyExceptionCacheErrorHandler();
+	}
+
+	@Bean
+	public RedisMessageListenerContainer container(){
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		container.setConnectionFactory(factory);
+		return container;
 	}
 
 	@Bean
