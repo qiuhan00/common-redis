@@ -59,7 +59,7 @@ public class RedissonAutoConfiguration {
 
 	@Bean(name = "redissonClient")
 	@ConditionalOnMissingBean(name = "redissonClient")
-	@ConditionalOnProperty(name = "spring.redis.redisson.master-name")
+	@ConditionalOnProperty(name = "spring.redis.redisson.masterName")
 	public RedissonClient redissonSentinel(){
 		Config config = new Config();
 		SentinelServersConfig serverConfig = config.useSentinelServers().addSentinelAddress(redissonProperties.getSentinelAddresses())
